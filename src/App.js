@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import './styles.css';
+import { Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { useState, useEffect } from 'react';
 
-function App() {
+import { GlobalProvider } from './context/GlobalState';
+import Questionaire from './components/Questionaire';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
+
+const API_LINK = 'https://opentdb.com/api.php?amount=10';
+
+export default function App() {
+  const classes = useStyles();
+
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    fetch(API_LINK)
+      .then((res) => res.json())
+      .then((data) => {
+        setQuestions(data.results);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GlobalProvider className={classes.root}>
+      <Container
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          alignItems: 'center',
+        }}
+      >
+        <Questionaire questions={questions} />
+      </Container>
+    </GlobalProvider>
   );
 }
-
-export default App;
