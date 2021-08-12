@@ -40,7 +40,7 @@ const Answers = ({ questions }) => {
         ...questions[questionIndex].incorrect_answers,
       ]).map((answer) => {
         return (
-          <Grid item xs={6} sm={3} key={answer}>
+          <Grid item xs={12} sm={6} key={answer}>
             <Button
               fullWidth
               color='primary'
